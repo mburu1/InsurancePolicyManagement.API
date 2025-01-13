@@ -4,6 +4,7 @@ using InsurancePolicyManagement.API.Infrastructure.Data;
 using InsurancePolicyManagement.API.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,15 @@ builder.Services.AddSwaggerGen(c => {
             Url = new Uri("https://www.abc.com/license"),
         }
     });
+});
+
+builder.Host.UseSerilog((context, configuration) =>
+{
+
+    configuration
+        .MinimumLevel.Information()
+        .Enrich.FromLogContext()
+        .WriteTo.File(@"D:\Sam\Code\2025\tony\project\API\Logs\" + DateTime.Now.ToString("yyyyMMdd") + @"\InsurancePolicyManagement.Api.log", rollingInterval: RollingInterval.Hour, outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}] [{Level:u3}] [{ClientIp}] [{RequestId}] [{RequestPath}] [{Message:lj}] [{Exception}]{NewLine}");
 });
 
 var app = builder.Build();
