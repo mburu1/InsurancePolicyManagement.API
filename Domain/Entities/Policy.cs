@@ -8,5 +8,9 @@
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal Premium { get; set; }
+        public string CreatedBy { get; set; } = string.Empty;
+        public string? ModifiedBy { get; set; } = string.Empty;
+        public DateTime CreatedtDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }

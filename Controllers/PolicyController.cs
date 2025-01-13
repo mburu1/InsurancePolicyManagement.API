@@ -1,7 +1,10 @@
-﻿using InsurancePolicyManagement.API.Domain.Entities;
+﻿using Azure.Core;
+using InsurancePolicyManagement.API.Domain.Entities;
 using InsurancePolicyManagement.API.Domain.Interfaces;
 using InsurancePolicyManagement.API.Domain.Services;
+using InsurancePolicyManagement.API.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Mapster;
 
 namespace InsurancePolicyManagement.API.Controllers
 {
@@ -31,11 +34,12 @@ namespace InsurancePolicyManagement.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Policy policy)
+        public async Task<IActionResult> Create(PolicyDTO policy)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _policyService.AddAsync(policy);
-            return CreatedAtAction(nameof(GetById), new { id = policy.Id }, policy);
+            var _policy = policy.Adapt<Policy>();
+            await _policyService.AddAsync(_policy);
+            return CreatedAtAction(nameof(Create), new { PolicyNumber = policy.PolicyNumber }, policy);
         }
 
         [HttpPut("{id}")]
